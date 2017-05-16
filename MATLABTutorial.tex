@@ -1,4 +1,4 @@
-%MATLAB Tutorial for Summer 2016 Research 
+%MATLAB Tutorial for Summer 2017 Research 
 \documentclass[12pt, compress,xcolor={usenames,dvipsnames}]{beamer} %slides and notes
 \usepackage{amsmath,datetime,xmpmulti,mathtools,bbm,array,booktabs,alltt,xspace,mathabx,pifont,tikz,graphicx}
 \usepackage[autolinebreaks]{mcodefred}
@@ -151,7 +151,9 @@ y =
 
 \begin{frame}{\texttt{bsxfun}}
 	\vspace{-4ex}
-	Supose that you have a row vectors, \mcode{x}, and you want to make the matrix \mcode{A = (a_ij) = (x_i^j)}.  The function \mcode{bsxfun} does this quickly:
+	Supose that you have a row vector, \mcode{x}, and you want to make the matrix 
+	\mcode{A = (a_ij) = (x_i^j)} for $j=0, \ldots, p$.  The function \mcode{bsxfun} does this 
+	quickly:
 	\vspace{-2ex}
 	\lstinputlisting[linerange = {27-34}]{ProgramsImages/FittingData.m}
 \end{frame}
@@ -179,7 +181,8 @@ y =
 	
 	\bigskip
 	
-	Come to the \alert{Advanced \Matlab Tutorial} here at 9 AM, tomorrow, Tuesday, May 24.
+	%Come to the \alert{Advanced \Matlab Tutorial} here at 9 AM, tomorrow, Tuesday, 
+	%May 24.
 	
 \end{frame}
 

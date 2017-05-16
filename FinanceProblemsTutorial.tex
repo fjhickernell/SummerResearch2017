@@ -23,8 +23,8 @@
 
 
 \input FJHDef.tex
-\DeclareSymbolFont{greekletters}{OML}{cmr}{m}{it}
-\DeclareMathSymbol{\varrho}{\mathalpha}{greekletters}{"25}
+%\DeclareSymbolFont{greekletters}{OML}{cmr}{m}{it}
+%\DeclareMathSymbol{\varrho}{\mathalpha}{greekletters}{"25}
 \newcommand{\smallcite}[1]{{\small\cite{#1}}}
 \newcommand{\smallocite}[1]{{\small\ocite{#1}}}
 \DeclareMathOperator{\MSE}{mse}
@@ -125,10 +125,11 @@ B(t_j) &= B(t_{j-1}) + \sqrt{t_j -t_{j-1}} \, Z_j, \quad j=1, \ldots, d, \qquad 
 \item[Next jobs.] Consider the SABR model, the variance gamma model, etc.
 \end{description}
 
-\item Expand the class \mcode{optPayoff} to include other options, e.g., multi-asset options (1--3 students).  
+\item Expand the class \mcode{optPrice} and its superclasses to be multidimensional 
+(1--3 students).  
 \begin{description}
 \item[First job.] Become familiar with what is available.
-\item[Next jobs.] Add basket  and American options.
+\item[Next jobs.] Work on \mcode{stochProcess}
 \end{description}
 
 \item Alter \mcode{cubSobol_g} so that it can handle American options  (1--3 students).  Tony has been working on this.
@@ -137,7 +138,8 @@ B(t_j) &= B(t_{j-1}) + \sqrt{t_j -t_{j-1}} \, Z_j, \quad j=1, \ldots, d, \qquad 
 	\item[Next jobs.] Get it working.  Try control variates.
 \end{description}
 
-\item Finish implementing work done by Monte Carlo students last fall, including antithetic variates, value-at-risk, varying volatility and interest rates (1--3 students). 
+\item Finish implementing work done by previous Monte Carlo students, including 
+antithetic variates, value-at-risk, varying volatility and interest rates (1--3 students). 
 \begin{description}
 	\item[First job.] Become more familiar with existing feature branches.
 	\item[Next jobs.] Test, fix, and merge.

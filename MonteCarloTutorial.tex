@@ -1,4 +1,4 @@
-%IIT, May 23, 2016
+%IIT, Summer 2017
 \documentclass[10pt,compress,xcolor={usenames,dvipsnames}]{beamer} %slides and notes
 \usepackage{amsmath,datetime,xmpmulti,mathtools,bbm,array,booktabs,alltt,xspace,mathabx,pifont,tikz,graphicx}
 \usepackage[author-year]{amsrefs}
@@ -23,8 +23,8 @@
 
 
 \input FJHDef.tex
-\DeclareSymbolFont{greekletters}{OML}{cmr}{m}{it}
-\DeclareMathSymbol{\varrho}{\mathalpha}{greekletters}{"25}
+%\DeclareSymbolFont{greekletters}{OML}{cmr}{m}{it}
+%\DeclareMathSymbol{\varrho}{\mathalpha}{greekletters}{"25}
 \newcommand{\smallcite}[1]{{\small\cite{#1}}}
 \newcommand{\smallocite}[1]{{\small\ocite{#1}}}
 \DeclareMathOperator{\MSE}{mse}
@@ -83,9 +83,9 @@ Monte Carlo methods are used for problems that can be formulated as finding
 where $Y$ is a \beamerbutton{\href{http://en.wikipedia.org/wiki/Random_variable}{random variable}} with a \alert{complicated} \beamerbutton{\href{http://en.wikipedia.org/wiki/Probability_distribution}{distribution}}.  This means that
 \begin{multline*}
 \mu := \begin{Bmatrix}\displaystyle
-\sum_{y \in \Omega} y \, \varrho(y) \\[3ex]
+\sum_{y \in \Omega} y \, \varrho_Y(y) \\[3ex]
 \displaystyle
-\int_{\Omega} y \, \varrho(y) \, \dif y 
+\int_{\Omega} y \, \varrho_Y(y) \, \dif y 
 \end{Bmatrix},
 \text{where $Y$ is a}
 \begin{Bmatrix}
@@ -93,19 +93,20 @@ where $Y$ is a \beamerbutton{\href{http://en.wikipedia.org/wiki/Random_variable}
 \text{continuous}
 \end{Bmatrix}
 \text{random variable and} \\[-3ex]
-\varrho \text{ is the probability}
+\varrho_Y \text{ is the probability}
 \begin{Bmatrix}
 \text{mass} \\
 \text{density}
 \end{Bmatrix}
 \text{function, i.e., }\Prob(Y \le y) = 
 \begin{Bmatrix}\displaystyle
-\sum_{y' \le y} \varrho(y') \\[3ex]
+\sum_{y' \le y} \varrho_Y(y') \\[3ex]
 \displaystyle
-\int_{y' \le y} \varrho(y') \, \dif y' 
+\int_{y' \le y} \varrho_Y(y') \, \dif y' 
 \end{Bmatrix},
 \end{multline*}
-is too difficult to evaluate analytically because $\varrho$ is too complex.  Here $\Omega 
+is too difficult to evaluate analytically because $\varrho_Y$ is too complex.  Here 
+$\Omega 
 \subseteq \reals$ is the 
 \beamerbutton{\href{http://en.wikipedia.org/wiki/Sample_space}{sample space}}  of 
 $Y$---the set of all possible values for $Y$.  
@@ -233,15 +234,19 @@ The GAIL algorithms most closely related to this summer project are listed below
 \frametitle{Importance Sampling}
 Suppose that one has a multivariate integral of the form 
 \[
-\mu = \int_{\reals^d} g(\vz) \, \dif \vz
+\mu = \int_{\reals^d} g(\vx) \, \dif \vx.
 \]
 We might interpret $\mu$ as some mean, but this is not necessary.  Suppose that $\vX$ is a random variable defined on $\reals^d$ with probability density function $\varrho$.   Then,
 \begin{align*}
-\mu &= \int_{\reals^d} \frac{g(\vz)}{\varrho(\vz)} \, \varrho(\vz) \, \dif \vz \\
+\mu &= \int_{\reals^d} \frac{g(\vx)}{\varrho(\vx)} \, \varrho(\vx) \, \dif \vx \\
 & = \int_{\reals^d} f(\vx) \, \varrho(\vx) \, \dif \vx, \qquad f(\vx):= \frac{g(\vx)}{\varrho(\vx)}, \quad \vx \in \reals^d, \\
 & = \Ex[f(\vX)] \approx \hmu_n = \frac 1n \sum_{i=1}^n f(\vX_i).
 \end{align*}
-This works well if $f$ does not vary too much, and if $\varrho(\vx)$ does not vanish unless $g(\vx)$ also vanishes at the same $\vx$.  Note that there are many possible choices of $\varrho$.  The choice of $\varrho$ is called importance sampling---\alert{sampling more where it matters}.  See \mcode{ImportanceSamplingEx.m}
+This works well if $f$ does not vary too much, and if $\varrho(\vx)$ does not vanish 
+unless $g(\vx)$ also vanishes at the same $\vx$.  Note that there are many possible 
+choices of $\varrho$.  The choice of $\varrho$ is called importance 
+sampling---\alert{sampling more where it matters}.  \\ \quad See 
+\mcode{ImportanceSamplingEx.m}
 
 \end{frame}
 
@@ -249,15 +254,20 @@ This works well if $f$ does not vary too much, and if $\varrho(\vx)$ does not va
 \frametitle{Variable Transformation}
 Consider multivariate integral of the form 
 \begin{multline*}
-\mu :=  \int_{\Xi} f(\vx) \, w(\vx) \dif \vx  =  \int_{\Xi} f(\vx) \, \varrho(\vx) \dif \vx \int_{\Xi} w(\vx) \, \dif \vx =    \Ex(f(\vX)) \int_{\Xi} w(\vx) \, \dif \vx  \\
+\mu :=  \int_{\Xi} f(\vx) \, w(\vx) \, \dif \vx  =  \int_{\Xi} f(\vx) \, 
+\underbrace{\frac{w(\vx)}{\int_{\Xi} w(\vx) \, \dif \vx }}_{\varrho(\vx)} \, \dif \vx \int_{\Xi} 
+w(\vx) \, \dif \vx =    \Ex(f(\vX)) \int_{\Xi} w(\vx) \, \dif \vx  \\
 \approx \hmu_n \int_{\Xi} w(\vx) \, \dif \vx, \\  
-\text{where }\hmu_n = \frac 1n \sum_{i=1}^n f(\vX_i), \
-\Xi \subseteq \reals^d, \ w : \Xi \to [0,\infty), \
-\varrho(\vx) = \frac{w(\vx)}{\displaystyle \int_{\Xi} w(\vx) \, \dif \vx}, \text{ and } \vX \sim \varrho.
+\text{where }
+\Xi \subseteq \reals^d, \ w : \Xi \to [0,\infty), \text{ and } \vX \sim \varrho.
 \end{multline*}
+Then 
+\[
+\hmu_n = \frac 1n \sum_{i=1}^n f(\vX_i).
+\]
 
 Suppose that it is \alert{awkward to generate} $\vX$ with probability density $\varrho$ on $\Xi$, say because $\Xi$ is not a box.  
-We want to make a transformation to a new random variable . 
+We want to make a transformation to a new random variable. 
 
 \end{frame}
 
@@ -308,6 +318,59 @@ The two books below have helpful chapters on making variable transformations:
 \end{tabular}
 \end{frame}
 
+\begin{frame}
+\frametitle{More Evenly Spread Points}
+\vspace{-6ex}
+\[
+\int_{[0,1]^d} f(\vx) \approx \hmu_n = \frac 1n \sum_{i=1}^n f(\vx_i)
+\]
+How should we choose the $\vx_1, \vx_2, \dots$?
+
+\bigskip
+
+	\begin{columns}
+	\begin{column}{0.5\textwidth}
+		\centering
+		\only<1-3>{\alert{Bad}}
+		\only<4->{\alert{Excellent}, better than IID}
+		\\[1ex]
+		\includegraphics<1>[height = 4.5cm]{ProgramsImages/GridPoints12.eps}
+		\includegraphics<2>[height = 4.5cm]{ProgramsImages/GridPoints13.eps} 
+		\includegraphics<3>[height = 4.5cm]{ProgramsImages/GridPoints35.eps}
+		\includegraphics<4>[height = 4.5cm]{ProgramsImages/SLatticePoints.eps}
+		\includegraphics<5>[height = 4.5cm]{ProgramsImages/SLatticePoints13.eps}
+		\includegraphics<6>[height = 4.5cm]{ProgramsImages/SLatticePoints35.eps}
+		\includegraphics<7>[height = 4.5cm]{ProgramsImages/SSobolPoints-0.eps}
+		\includegraphics<8>[height = 4.5cm]{ProgramsImages/SSobolPoints-1.eps}
+		\includegraphics<9>[height = 4.5cm]{ProgramsImages/SSobolPoints-2.eps}
+		\includegraphics<10>[height = 4.5cm]{ProgramsImages/SSobolPoints-3.eps}
+		\includegraphics<11>[height = 4.5cm]{ProgramsImages/SSobolPoints-4.eps}
+		\includegraphics<12>[height = 4.5cm]{ProgramsImages/SSobolPoints-5.eps}
+		\includegraphics<13>[height = 4.5cm]{ProgramsImages/SSobolPoints-6.eps}
+		\includegraphics<14>[height = 4.5cm]{ProgramsImages/SSobolPoints35-0.eps}
+\includegraphics<15>[height = 4.5cm]{ProgramsImages/SSobolPoints35-1.eps}
+\includegraphics<16>[height = 4.5cm]{ProgramsImages/SSobolPoints35-2.eps}
+\includegraphics<17>[height = 4.5cm]{ProgramsImages/SSobolPoints35-3.eps}
+\includegraphics<18>[height = 4.5cm]{ProgramsImages/SSobolPoints35-4.eps}
+\includegraphics<19>[height = 4.5cm]{ProgramsImages/SSobolPoints35-5.eps}
+		\\
+	\only<1-3>{$10^9$ points in dimension $10$}
+	\only<4->{$64$ points in dimension $10$}
+	\end{column}
+	\begin{column}{0.5\textwidth}
+		\centering
+		\alert{Common}
+		\\[1ex]
+		\includegraphics<1,4,7-13>[height = 4.5cm]{ProgramsImages/IIDPoints12.eps}
+		\includegraphics<2,5>[height = 4.5cm]{ProgramsImages/IIDPoints13.eps}
+		\includegraphics<3,6,14-19>[height = 4.5cm]{ProgramsImages/IIDPoints35.eps} 
+		\\
+		$64$ points in dimension $10$
+	\end{column}
+\end{columns}
+
+\end{frame}
+
 
 \section{Research Problems}
 
@@ -339,15 +402,18 @@ The two books below have helpful chapters on making variable transformations:
 \frametitle{Possible Summer Research Problems}
 
 \begin{itemize}
-\item Port GAIL routines to R, Python, Julia, or C (up to 6 students).  R is used by many statisticians.  Some work in R by last year's students and some work on C by Tony.
+\item Port GAIL routines to R, Python, Julia, or C (up to 6 students).  R is used by many 
+statisticians.  Some work in R by previous students and some work on C by Tony.
 \begin{description}
-\item[First job.] Port \mcode{meanMC_CLT} and \mcode{CLTAvgDistPts.m} to one of these languages.  Consider using Jupyter.
+\item[First job.] Port \mcode{meanMC_CLT} and \mcode{CLTAvgDistPts.m} to one of 
+these languages.
 \item[Next jobs.] Check out previous ports of \mcode{meanMC_g} and \mcode{cubSobol_g} to R.  Enhance as needed.
 \newline Port these routines to other languages.
 \newline Test performance of various languages.
 \end{description}
 
-\item Develop versions of GAIL routines that take advantage of multiple cores using the Parallel Computing Toolbox (1--2 students).  
+\item Develop versions of GAIL routines that take advantage of multiple cores using the 
+Parallel Computing Toolbox or the built in capabilities of other languages(1--2 students).  
 \begin{description}
 \item[First job.] Develop an example using \mcode{meanMC_CLT} and \mcode{CLTAvgDistPts.m}.
 \item[Next jobs.] Develop a parallel version of \mcode{meanMC_g} (minus its bells and whistles).
